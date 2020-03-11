@@ -7,7 +7,8 @@ class Board extends React.Component {
           board: Array(1).fill([0,0]),
           rows: 50,
           cols: 150,
-          interval: 1000
+          interval: 10,
+          startId: ''
         };
 
         this.rowChange = this.rowChange.bind(this);
@@ -89,7 +90,10 @@ class Board extends React.Component {
     }
 
     runGame() {
-        setInterval(() => {this.startGame()}, this.state.interval);
+        var startId = setInterval(() => {this.startGame()}, this.state.interval);
+        this.setState({
+            startId: startId
+        });
     }
 
     startGame() {
@@ -201,7 +205,7 @@ class Board extends React.Component {
     }
 
     stopGame() {
-        
+        clearInterval(this.state.startId);
     }
 
     render() {
@@ -245,7 +249,7 @@ class Board extends React.Component {
                     <div className="boardRow" key={index} id={index}>
                         {square.map((box, index) => (
                             <button 
-                            className={`boardButton ${(box == 0) ? "zero" : "one" }`}
+                            className={`boardButton ${(box === 0) ? "zero" : "one" }`}
                             key={index}
                             id={index}
                             value={box}
