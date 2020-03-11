@@ -5,14 +5,15 @@ class Board extends React.Component {
         super(props);
         this.state = {
           board: Array(1).fill([0,0]),
-          rows: 12,
-          cols: 12,
+          rows: 50,
+          cols: 150,
           interval: 1000
         };
 
         this.rowChange = this.rowChange.bind(this);
         this.colChange = this.colChange.bind(this);
         this.intervalChange = this.intervalChange.bind(this);
+        this.cellClick = this.cellClick.bind(this);
     }
 
     rowChange(event) {   
@@ -49,15 +50,40 @@ class Board extends React.Component {
                 });
     }
 
+    emptyBoard() {
+        var gameBoard = [...Array(this.state.rows)].map(() => 
+            Array(this.state.cols));
+
+        for (var i = 0; i < this.state.rows; i++) {
+            for (var j = 0; j < this.state.cols; j++) {
+                gameBoard[i][j] = 0;
+            }
+        }
+
+        this.setState({
+            board: gameBoard
+                });
+    }
+
     cellClick(event) {
+        var gameBoard = [...this.state.board];
+
         switch(parseInt(event.target.value)) {
             case 0:
                 event.target.value = 1;
-                event.target.innerHTML = 1;
+                event.target.innerHTML = 1;                
+                gameBoard[event.target.parentElement.id][event.target.id] = 1
+                this.setState({
+                    board: gameBoard
+                });
                 break;
             default:
                 event.target.value = 0;
                 event.target.innerHTML = 0;
+                gameBoard[event.target.parentElement.id][event.target.id] = 0
+                this.setState({
+                    board: gameBoard
+                });
                 break;
         }
     }
@@ -68,7 +94,14 @@ class Board extends React.Component {
 
     startGame() {
         var calcNextStep = () => {
-            var gameBoard = [...this.state.board];
+            var gameBoard = [...Array(this.state.rows)].map(() => 
+            Array(this.state.cols));
+            for (var i = 0; i < this.state.rows; i++) {
+                for (var j = 0; j < this.state.cols; j++) {
+                    gameBoard[i][j] = this.state.board[i][j];
+                }
+            }
+
             for (var i = 0; i < this.state.rows; i++) {
                 for (var j = 0; j < this.state.cols; j++) {
                     var neighbours = Array(8);
@@ -167,6 +200,10 @@ class Board extends React.Component {
         });
     }
 
+    stopGame() {
+        
+    }
+
     render() {
         return (
             <div>
@@ -186,6 +223,10 @@ class Board extends React.Component {
                     this.createBoard() }>
                     Change Array
                 </button>
+                <button onClick={ () => 
+                    this.emptyBoard() }>
+                    Empty Board
+                </button>
                 <label>Interval</label>
                 <input
                     type='number'
@@ -195,14 +236,18 @@ class Board extends React.Component {
                 <button onClick={ () => this.runGame() }>
                     Start Game
                 </button>
+                <button onClick={ () => this.stopGame() }>
+                    Stop Game
+                </button>
                 
                 <div className="boardRow">
                 {this.state.board.map((square, index) => (
-                    <div className="boardRow" key={index}>
+                    <div className="boardRow" key={index} id={index}>
                         {square.map((box, index) => (
                             <button 
                             className={`boardButton ${(box == 0) ? "zero" : "one" }`}
                             key={index}
+                            id={index}
                             value={box}
                             onClick={this.cellClick}>
                                 {box}
