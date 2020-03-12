@@ -106,8 +106,8 @@ class Board extends React.Component {
                 }
             }
 
-            for (var i = 0; i < this.state.rows; i++) {
-                for (var j = 0; j < this.state.cols; j++) {
+            for (i = 0; i < this.state.rows; i++) {
+                for (j = 0; j < this.state.cols; j++) {
                     var neighbours = Array(8);
                     try {
                         neighbours[0] = this.state.board[i-1][j-1];
