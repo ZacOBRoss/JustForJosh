@@ -51,6 +51,24 @@ const Pong = () => {
                 break;
             default:
                 break;
+        }        
+    })
+    document.addEventListener("keyup", (e) => {
+        switch (e.keyCode) {            
+            case (87):
+                paddle1.isUp = false;
+                break;
+            case (83):
+                paddle1.isDown = false;
+                break;
+            case (38):
+                paddle2.isUp = false;
+                break;
+            case (40):
+                paddle2.isDown = false;
+                break;
+            default:
+                break;
         }
     })
 
