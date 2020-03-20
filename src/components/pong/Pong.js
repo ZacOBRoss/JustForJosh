@@ -2,6 +2,12 @@ import React from 'react'
 
 import PongBoard from './PongBoard'
 import Paddle from './Paddle'
+import Ball from './Ball'
+
+let pongBoard;
+let paddle1;
+let paddle2;
+let ball;
 
 const draw = (canvasRef, pongBoard, paddle1, paddle2) => {
     pongBoard.displayBoard();
@@ -21,16 +27,18 @@ const draw = (canvasRef, pongBoard, paddle1, paddle2) => {
     else if (paddle2.isDown === true) {
         paddle2.down();
     }
+
+    ball.updateBall();
+    ball.displayBall();
 }
 
 const Pong = () => {
-    const canvasRef = React.useRef(null)
-    let pongBoard;
-    let paddle1;
-    let paddle2;
+    const canvasRef = React.useRef(null)    
+    
     pongBoard = new PongBoard(canvasRef);
     paddle1 = new Paddle(1, canvasRef);
     paddle2 = new Paddle(2, canvasRef);
+    ball = new Ball(pongBoard, paddle1, paddle2);
     document.addEventListener("keydown", (e) => {
         switch (e.keyCode) {            
             case (87):

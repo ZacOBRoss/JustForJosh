@@ -21,13 +21,13 @@ class Paddle {
 
     up() {
         if (this.y > 0) {
-            this.y -= 2;
+            this.y -= 2.5;
         }        
     }
 
     down() {
         if (this.y < 670) {
-            this.y += 2;
+            this.y += 2.5;
         }        
     }
 }
