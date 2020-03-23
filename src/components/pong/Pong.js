@@ -8,8 +8,9 @@ let pongBoard;
 let paddle1;
 let paddle2;
 let ball;
+let interval;
 
-const draw = (canvasRef, pongBoard, paddle1, paddle2) => {
+const draw = (pongBoard, paddle1, paddle2) => {
     pongBoard.displayBoard();
     paddle1.displayPaddle();
     paddle2.displayPaddle();
@@ -85,11 +86,25 @@ const Pong = () => {
             <h1>Pong</h1>
             <button
                 onClick = {() => {
-                    setInterval(
-                        function() {
-                            draw(canvasRef, pongBoard, paddle1, paddle2)
-                        },
-                         10);                    
+                    if (!interval) {
+                        interval = setInterval(
+                            function() {
+                                draw(pongBoard, paddle1, paddle2)
+                            },
+                             10);
+                    }
+                    else {
+                        clearInterval(interval);
+                        pongBoard = new PongBoard(canvasRef);
+                        paddle1 = new Paddle(1, canvasRef);
+                        paddle2 = new Paddle(2, canvasRef);
+                        ball = new Ball(pongBoard, paddle1, paddle2);
+                        interval = setInterval(
+                            function() {
+                                draw(pongBoard, paddle1, paddle2)
+                            },
+                             10);
+                    }
                 }}
             >
                 New Game
