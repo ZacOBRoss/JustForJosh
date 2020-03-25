@@ -5,6 +5,7 @@ import { NavLink, Switch, Route } from 'react-router-dom';
 import Home from './components/home'
 import GameOfLife from './components/GameOfLife'
 import Pong from './components/pong/Pong'
+import SpaceInvaders from './components/SpaceInvaders/SpaceInvaders'
 
 const App = () => (
   <div className='app'>
@@ -32,6 +33,11 @@ const Navigation = () => (
           Pong
         </NavLink>
       </li>
+      <li>
+        <NavLink exact activeClassName="current" to='SpaceInvaders'>
+          Space Invaders
+        </NavLink>
+      </li>
     </ul>
   </nav>
 );
@@ -41,6 +47,7 @@ const Main = () => (
     <Route exact path='/' component={Home}></Route>
     <Route exact path='/GameOfLife' component={GameOfLife}></Route>
     <Route exact path='/Pong' component={Pong}></Route>
+    <Route exact path='/SpaceInvaders' component={SpaceInvaders}></Route>
   </Switch>
 )
 
