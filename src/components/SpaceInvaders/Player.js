@@ -8,9 +8,10 @@ class Player {
         invaders, 
         canvasRef,
         playerWidth,
-        playerHeight) {
+        playerHeight,
+        score) {
         this.image = shooterImage;
-        this.x = boardWidth/2;
+        this.x = 40;
         this.y = boardHeight - 40;
         this.invaders = invaders;
         this.canvasRef = canvasRef;
@@ -18,6 +19,7 @@ class Player {
         this.playerHeight = playerHeight;
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
+        this.score = score;
 
         this.isMovingLeft = false;
         this.isMovingRight = false;
@@ -42,6 +44,7 @@ class Player {
             this.bullets[i].update();
 
             if (this.hasHitAlien(this.bullets[i])){
+                this.score += 10;
                 this.bullets.splice(i, 1);
                 break;
             }
@@ -106,7 +109,7 @@ class Player {
             return Math.sqrt((xDist * xDist) + (yDist * yDist));
         }
 
-        if (dist < 20) {
+        if (dist() < 20) {
             return true;
         }
         else {

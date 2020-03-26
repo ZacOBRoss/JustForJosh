@@ -15,20 +15,25 @@ let alienWidth = 40;
 let alienHeight = 40;
 let playerWidth = 40;
 let playerHeight = 30;
+let invaders
 let player
+let score = 0;
+let lives = 3;
+let highScore = 0;
 
 const initialiseInvaders = (canvasRef, invader1Ref, shooterRef) => {
     invader1 = invader1Ref.current;
     shooter = shooterRef.current;
 
-    const invaders = new Invaders(
+    invaders = new Invaders(
         invader1, 
         4, 
         boardWidth, 
         boardHeight, 
         alienWidth,
         alienHeight,
-        canvasRef);
+        canvasRef,
+        lives);
 
     player = new Player(
         shooter,
@@ -37,12 +42,22 @@ const initialiseInvaders = (canvasRef, invader1Ref, shooterRef) => {
         invaders,
         canvasRef,
         playerWidth,
-        playerHeight);
+        playerHeight,
+        score);
 
     invaders.player = player;
 
     interval = setInterval(
             function() {
+                if (invaders) {
+                    lives = invaders.lives;
+                }
+                if (player) {
+                    score = player.score;
+                    if (score > highScore) {
+                        highScore = score;
+                    }
+                }
                 draw(canvasRef, invaders, player)
             },
              10);
@@ -53,11 +68,38 @@ const draw = (canvasRef, invaders, player) => {
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, boardWidth, boardHeight);
+    ctx.font = "30px Stencil";
+    ctx.fillStyle = "white";
+    ctx.fillText('SCORE: ' + score, 5, 30);
+    ctx.fillText('HIGHSCORE: ' + highScore, boardWidth/2 - 150, 30);
+    ctx.fillText('LIVES: ', boardWidth - 250, 30);
+    for (let i = lives; i > 0; i--) {
+        ctx.drawImage(
+            shooter, 
+            boardWidth - (200 - ((playerWidth + 10) * i)), 
+            5,
+            playerWidth,
+            playerHeight)
+    }
     
     invaders.draw();
     player.draw()
     invaders.update();
     player.update();
+
+    if (lives <= 0) {
+        clearInterval(interval);
+        ctx.fillStyle = "black";
+        ctx.fillRect(
+            boardWidth / 4, 
+            boardHeight / 4, 
+            boardWidth / 2, 
+            boardHeight / 4);
+        ctx.fillStyle = "lime green";
+        ctx.fillText('GAME OVER', (boardWidth/2) - 100, (boardHeight/2) - 100);
+        ctx.fillText('SCORE: ' + score, (boardWidth/2) - 100, (boardHeight/2) - 65);
+        ctx.fillText('HIGHSCORE: ' + highScore, (boardWidth/2) - 100, (boardHeight/2) - 30);
+    }
 }
 
 const SpaceInvaders = () => {
@@ -67,9 +109,6 @@ const SpaceInvaders = () => {
     
     document.addEventListener("keydown", (e) => {
         switch (e.keyCode) {
-            case (32):
-                player.shoot();
-                break;
             case (37):
                 player.moveLeft();
                 break;
@@ -82,6 +121,9 @@ const SpaceInvaders = () => {
     });
     document.addEventListener("keyup", (e) => {
         switch (e.keyCode) {
+            case (32):
+                player.shoot();
+                break;
             case (37):
                 player.isMovingLeft = false;
                 break;
@@ -98,8 +140,16 @@ const SpaceInvaders = () => {
             <h1>Space Invaders</h1>
             <button
                 onClick = {() => {
-                    initialiseInvaders(canvasRef, invader1Ref, shooterRef)
-                    
+                    if (!interval) {
+                        initialiseInvaders(canvasRef, invader1Ref, shooterRef); 
+                    }
+                    else {
+                        clearInterval(interval);
+                        score = 0;
+                        lives = 3;
+                        initialiseInvaders(canvasRef, invader1Ref, shooterRef); 
+                    }
+                                       
                 }}
             >
                 New Game

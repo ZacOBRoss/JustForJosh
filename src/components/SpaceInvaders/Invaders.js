@@ -9,7 +9,8 @@ class Invaders {
         boardHeight,
         alienWidth,
         alienHeight,
-        canvasRef) {
+        canvasRef,
+        lives) {
             this.alienImage = alienImage;
             this.rowsCount = rowsCount;
             this.direction = 0;
@@ -22,6 +23,7 @@ class Invaders {
             this.canvasRef = canvasRef;
             this.aliens = this.initialiseAliens();
             this.player = 0;
+            this.lives = lives;
 
             this.speed = 0.2;
 
@@ -116,7 +118,7 @@ class Invaders {
                 return Math.sqrt((xDist * xDist) + (yDist * yDist));
             }
 
-            if (dist < 20) {
+            if (dist() < 20) {
                 this.aliens.splice(i, 1);
                 return true;
             }
@@ -177,6 +179,7 @@ class Invaders {
             this.bullets[i].y += 2;
 
             if (this.hasHitPlayer(this.bullets[i])){
+                this.lives--;
                 this.bullets.splice(i, 1);
                 break;
             }
