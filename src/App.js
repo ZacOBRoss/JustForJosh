@@ -6,6 +6,7 @@ import Home from './components/home'
 import GameOfLife from './components/GameOfLife'
 import Pong from './components/pong/Pong'
 import SpaceInvaders from './components/SpaceInvaders/SpaceInvaders'
+import Tetris from './components/Tetris/Tetris'
 
 const App = () => (
   <div className='app'>
@@ -34,8 +35,13 @@ const Navigation = () => (
         </NavLink>
       </li>
       <li>
-        <NavLink exact activeClassName="current" to='SpaceInvaders'>
+        <NavLink exact activeClassName="current" to='/SpaceInvaders'>
           Space Invaders
+        </NavLink>
+      </li>
+      <li>
+        <NavLink exact activeClassName="current" to='/Tetris'>
+          Tetris
         </NavLink>
       </li>
     </ul>
@@ -48,6 +54,7 @@ const Main = () => (
     <Route exact path='/GameOfLife' component={GameOfLife}></Route>
     <Route exact path='/Pong' component={Pong}></Route>
     <Route exact path='/SpaceInvaders' component={SpaceInvaders}></Route>
+    <Route exact path='/Tetris' component={Tetris}></Route>
   </Switch>
 )
 
